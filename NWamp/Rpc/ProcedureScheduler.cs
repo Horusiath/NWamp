@@ -17,6 +17,11 @@ namespace NWamp.Rpc
         protected IResponseQueue Response;
 
         /// <summary>
+        /// Type resolver used for converting deserialized JSON object into specific type instances.
+        /// </summary>
+        protected ITypeResolver TypeResolver;
+
+        /// <summary>
         /// Collection of <see cref="Task"/> objects, handling RPC which are currently executing.
         /// </summary>
         protected ConcurrentDictionary<string, Task> Tasks;
@@ -25,9 +30,11 @@ namespace NWamp.Rpc
         /// Initializes a new instance of the <see cref="ProcedureScheduler"/> class.
         /// </summary>
         /// <param name="responseQueue">Response queue used for sending RPC results back to client</param>
-        public ProcedureScheduler(IResponseQueue responseQueue)
+        /// <param name="typeResolver">Resolver used for converting deserialized JSON object into specific type instances</param>
+        public ProcedureScheduler(IResponseQueue responseQueue, ITypeResolver typeResolver)
         {
             Response = responseQueue;
+            TypeResolver = typeResolver;
             Tasks = new ConcurrentDictionary<string, Task>();
         }
 
@@ -37,6 +44,8 @@ namespace NWamp.Rpc
         /// <param name="context"></param>
         public void Schedule(ProcedureContext context)
         {
+            ResolveProcedureArgumentsTypes(context);
+
             var callId = context.CallId;
             var handler = CreateProcedureHandler(context);
             var task = new Task(handler);
@@ -102,6 +111,20 @@ namespace NWamp.Rpc
         protected virtual CallErrorMessage CreateErrorMessage(ProcedureContext context, Exception exception)
         {
             return new CallErrorMessage(context.CallId, string.Empty, exception.Message);
+        }
+
+        /// <summary>
+        /// Converts provided procedure call arguments into destinated types.
+        /// </summary>
+        /// <param name="context"></param>
+        protected virtual void ResolveProcedureArgumentsTypes(ProcedureContext context)
+        {
+            for (int i = 0; i < context.Arguments.Length; i++)
+            {
+                var argType = context.ProcedureDefinition.ArgumentTypes[i];
+                var destinationObject = TypeResolver.Resolve(context.Arguments[i], argType);
+                context.Arguments[i] = destinationObject;
+            }
         }
     }
 }

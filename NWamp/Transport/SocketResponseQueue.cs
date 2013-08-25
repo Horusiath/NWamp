@@ -1,5 +1,6 @@
 ﻿using NWamp.Messages;
 using System;
+using System.Collections.Concurrent;
 
 namespace NWamp.Transport
 {
@@ -9,6 +10,19 @@ namespace NWamp.Transport
     public class SocketResponseQueue : IResponseQueue
     {
         /// <summary>
+        /// Internal queue used for storing and retrieving connections.
+        /// </summary>
+        private readonly BlockingCollection<Tuple<string, IMessage>> _queue;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SocketResponseQueue"/> class.
+        /// </summary>
+        public SocketResponseQueue()
+        {
+            _queue = new BlockingCollection<Tuple<string, IMessage>>();
+        }
+
+        /// <summary>
         /// Queues a new <paramref name="message"/> to be sent to 
         /// WAMP client identified by <paramref name="sessionId"/>.
         /// </summary>
@@ -16,7 +30,12 @@ namespace NWamp.Transport
         /// <param name="message">WAMP message to send</param>
         public void Send(string sessionId, IMessage message)
         {
-            throw new NotImplementedException();
+            _queue.TryAdd(Tuple.Create(sessionId, message));
         }
+
+        public Tuple<string, IMessage> Receive()
+        {
+            return _queue.Take();
+        } 
     }
 }

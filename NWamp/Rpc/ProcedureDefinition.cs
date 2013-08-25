@@ -15,13 +15,13 @@ namespace NWamp.Rpc
         public ProcedureDefinition(string procUri, Func<object[], object> procedureCall)
         {
             ProcedureCall = procedureCall;
-            ProcedureUri = procUri;
+            ProcedureUri = new Uri(procUri, UriKind.RelativeOrAbsolute);
         }
 
         /// <summary>
         /// Gets or sets fully qualified RPC URI string
         /// </summary>
-        public string ProcedureUri { get; set; }
+        public Uri ProcedureUri { get; set; }
 
         /// <summary>
         /// Gets or sets handler delegate for .NET wrapper method invoking registered remote procedure.

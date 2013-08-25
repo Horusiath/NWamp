@@ -114,6 +114,8 @@
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="PubSub.aspx" />
+    <Content Include="Rpc.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -135,6 +137,20 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PubSub.aspx.cs">
+      <DependentUpon>PubSub.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PubSub.aspx.designer.cs">
+      <DependentUpon>PubSub.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Rpc.aspx.cs">
+      <DependentUpon>Rpc.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Rpc.aspx.designer.cs">
+      <DependentUpon>Rpc.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

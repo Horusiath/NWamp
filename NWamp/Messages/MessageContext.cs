@@ -1,4 +1,5 @@
-﻿using NWamp.Rpc;
+﻿using System;
+using NWamp.Rpc;
 using NWamp.Topics;
 using NWamp.Transport;
 using System.Collections.Generic;
@@ -43,6 +44,6 @@ namespace NWamp.Messages
         /// <summary>
         /// Gets or sets collection of defined procedures, which could be called using RPC.
         /// </summary>
-        public IDictionary<string, ProcedureDefinition> Procedures { get; set; }
+        public IDictionary<Uri, ProcedureDefinition> Procedures { get; set; }
     }
 }

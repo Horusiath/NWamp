@@ -29,9 +29,9 @@ namespace NWamp
             }
             catch (Exception exc)
             {
-                var parsingException = new MessageParsingException("Error while parsing JSON to WAMP message frame", exc);
-                throw parsingException;
             }
+
+            return null;
         }
 
         public string SerializeMessage(IMessage message)

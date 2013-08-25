@@ -1,17 +1,26 @@
-﻿using NWamp.Messages;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using NWamp.Messages;
 using NWamp.Messages.Handlers;
 using NWamp.Rpc;
 using NWamp.Topics;
 using NWamp.Transport;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace NWamp
 {
     /// <summary>
     /// Abstract class representing WAMP server host.
     /// </summary>
-    public abstract class BaseWampHost
+    public abstract class BaseWampHost : IDisposable
     {
+        /// <summary>
+        /// Sender task used for checking if ResponseQueue has some message to send and sending them.
+        /// </summary>
+        private Task _senderTask;
+
         /// <summary>
         /// Message provider used for message serialization and deserialization.
         /// </summary>
@@ -30,7 +39,7 @@ namespace NWamp
         /// <summary>
         /// Collection fo registered methods to be called using WAMP RPC mechanism.
         /// </summary>
-        protected IDictionary<string, ProcedureDefinition> Procedures;
+        protected IDictionary<Uri, ProcedureDefinition> Procedures;
 
         /// <summary>
         /// Collection of message handlers used for responing on incoming WAMP messages.
@@ -49,36 +58,81 @@ namespace NWamp
         /// Initializes a new instance of <see cref="BaseWampHost"/>.
         /// </summary>
         /// <param name="messageProvider">Message provider used for WAMP message JSON serialization/deserialization</param>
-        protected BaseWampHost(IMessageProvider messageProvider)
+        /// <param name="typeResolver">Resolver used for converting deserialized JSON object into specific type instances</param>
+        protected BaseWampHost(Uri listeningUri, IMessageProvider messageProvider, ITypeResolver typeResolver)
         {
+            AddressUri = listeningUri;
             MessageProvider = messageProvider;
             Topics = new TopicCollection();
             ResponseQueue = new SocketResponseQueue();
-            Scheduler = new ProcedureScheduler(ResponseQueue);
+            Scheduler = new ProcedureScheduler(ResponseQueue, typeResolver);
             Sessions = new DictionarySessionContainer();
-            Procedures = new Dictionary<string, ProcedureDefinition>();
+            Procedures = new Dictionary<Uri, ProcedureDefinition>();
         }
+
+        /// <summary>
+        /// Gets listening URI address for current host.
+        /// </summary>
+        public Uri AddressUri { get; protected set; }
 
         /// <summary>
         /// Gets collection of currently active WAMP Pub/Sub topics.
         /// </summary>
         public TopicCollection Topics { get; protected set; }
-        
+
         /// <summary>
         /// Gets list of active WAMP sessions connected to current host.
         /// </summary>
         public ISessionContainer Sessions { get; protected set; }
 
+
+        /// <summary>
+        /// Starts listening, waiting for incoming connections.
+        /// </summary>
+        public virtual void Start()
+        {
+            _senderTask = Task.Factory.StartNew(SendMessages);
+        }
+
+        /// <summary>
+        /// Stops listening.
+        /// </summary>
+        public virtual void Stop()
+        {
+            if (_senderTask != null)
+            {
+                _senderTask.Dispose();
+                _senderTask = null;
+            }
+        }
+
+        /// <summary>
+        /// Disposes current host, closing all sessions.
+        /// </summary>
+        public virtual void Dispose()
+        {
+            var sessions = Sessions.ToArray();
+            foreach (var session in sessions)
+            {
+                session.Dispose();
+                Sessions.RemoveSession(session.SessionId);
+            }
+        }
+
         /// <summary>
         /// Registers na new procedure to be callable using RPC mechanism.
         /// </summary>
         /// <param name="procedureDefinition">Definition of remote procedure</param>
-        protected internal virtual void RegisterProcedure(ProcedureDefinition procedureDefinition)
+        protected internal virtual BaseWampHost RegisterProcedure(ProcedureDefinition procedureDefinition)
         {
+            procedureDefinition.ProcedureUri = GetProcedureUri(procedureDefinition.ProcedureUri);
+
             if (Procedures.ContainsKey(procedureDefinition.ProcedureUri))
                 Procedures[procedureDefinition.ProcedureUri] = procedureDefinition;
             else
                 Procedures.Add(procedureDefinition.ProcedureUri, procedureDefinition);
+
+            return this;
         }
 
         /// <summary>
@@ -105,7 +159,7 @@ namespace NWamp
             else
                 Handlers.Add(msgType, handler);
         }
-        
+
         /// <summary>
         /// Explicitly creates a new WAMP Pub/Sub topic.
         /// </summary>
@@ -212,8 +266,35 @@ namespace NWamp
         {
             var session = new WampSession(connection);
             Sessions.AddSession(session);
-            
+
             return session;
+        }
+
+        /// <summary>
+        /// Converts provided procedure URI into absolute form.
+        /// </summary>
+        /// <param name="procUri">Absolute or relative uri string</param>
+        /// <returns></returns>
+        private Uri GetProcedureUri(Uri procUri)
+        {
+            return procUri.IsAbsoluteUri
+                       ? procUri
+                       : new Uri(AddressUri, procUri);
+        }
+
+        /// <summary>
+        /// Gets new message from top of the response queue and sends it.
+        /// </summary>
+        private void SendMessages()
+        {
+            while (true)
+            {
+                var incoming = ResponseQueue.Receive();
+                var session = Sessions.GetSession(incoming.Item1);
+                var json = MessageProvider.SerializeMessage(incoming.Item2);
+                
+                session.Connection.Send(json);
+            }
         }
     }
 }

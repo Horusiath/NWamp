@@ -1,4 +1,5 @@
-﻿using NWamp.Rpc;
+﻿using System;
+using NWamp.Rpc;
 using NWamp.Transport;
 
 namespace NWamp.Messages.Handlers
@@ -14,15 +15,22 @@ namespace NWamp.Messages.Handlers
         /// <param name="messageContext">Context wrapper object for incoming WAMP message</param>
         public virtual void Handle(MessageContext messageContext)
         {
-            ProcedureDefinition procedureDefinition;
             var message = messageContext.Message as CallMessage;
-            if (message != null && messageContext.Procedures.TryGetValue(message.ProcUri, out procedureDefinition))
+            
+            if (message != null)
             {
-                var context = CreateProcedureContext(message, procedureDefinition, messageContext.SenderSession);
-                messageContext.Scheduler.Schedule(context);
+                ProcedureDefinition procedureDefinition;
+                var procUri = new Uri(message.ProcUri, UriKind.RelativeOrAbsolute);
+                if (messageContext.Procedures.TryGetValue(procUri, out procedureDefinition))
+                {
+                    var context = CreateProcedureContext(message, procedureDefinition, messageContext.SenderSession);
+                    messageContext.Scheduler.Schedule(context);
+                }
+                else
+                {
+                    //TODO: when procedure for requested URI has not been found CallErrorMessage should be sent
+                }
             }
-
-            //TODO: when procedure for requested URI has not been found CallErrorMessage should be sent
         }
 
         /// <summary>

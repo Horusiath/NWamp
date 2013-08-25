@@ -5,11 +5,16 @@ namespace NWamp.Examples
 {
     public class Global : System.Web.HttpApplication
     {
-        private AlchemyWampHost _host;
+        private BaseWampHost _host;
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            _host = new AlchemyWampHost(IPAddress.Any, 3333);
+            _host = new AlchemyWampHost(IPAddress.Any, 3333)
+                .RegisterFunction("/Calculator#Add", (double x, double y) => x + y)
+                .RegisterFunction("/Calculator#Sub", (double x, double y) => x - y)
+                .RegisterFunction("/Calculator#Mul", (double x, double y) => x * y)
+                .RegisterFunction("/Calculator#Div", (double x, double y) => x / y);
+
             _host.Start();
         }
 

@@ -1,12 +1,13 @@
 ﻿using System.Linq;
 using Alchemy;
+using Alchemy.Classes;
+using NWamp.Alchemy;
 using NWamp.Transport;
 using System.Net;
 using System.Collections.Generic;
 
 namespace NWamp
 {
-    using Alchemy.Classes;
     using System;
 
     /// <summary>
@@ -35,7 +36,7 @@ namespace NWamp
         /// <param name="address">IP address for current host</param>
         /// <param name="port">Listening port</param>
         public AlchemyWampHost(IPAddress address, int port)
-            : base(new NewtonsoftWampMessageProvider())
+            : base(new Uri("ws://" + address + ":" + port), new NewtonsoftWampMessageProvider(), new NewtonsoftTypeResolver())
         {
             _endpointSessions = new Dictionary<EndPoint, IWampSession>();
             _server = new WebSocketServer(port, address)
@@ -50,16 +51,18 @@ namespace NWamp
         /// <summary>
         /// Starts listening, waiting for incoming connections.
         /// </summary>
-        public void Start()
+        public override void Start()
         {
+            base.Start();
             _server.Start();
         }
 
         /// <summary>
         /// Stops listening.
         /// </summary>
-        public void Stop()
+        public override void Stop()
         {
+            base.Stop();
             Dispose();
             _server.Stop();
         }
@@ -67,15 +70,9 @@ namespace NWamp
         /// <summary>
         /// Disposes current host, closing all sessions.
         /// </summary>
-        public void Dispose()
+        public override void Dispose()
         {
-            var sessions = Sessions.ToArray();
-            foreach (var session in sessions)
-            {
-                session.Dispose();
-                Sessions.RemoveSession(session.SessionId);
-            }
-
+            base.Dispose();
             _server.Dispose();
         }
 
@@ -141,7 +138,7 @@ namespace NWamp
             var alchemyConnection = connection as AlchemyWampConnection;
             if (alchemyConnection == null)
             {
-                throw new ArgumentException("Provided WAMP connection was not of type AlchemyWampConnection");    
+                throw new ArgumentException("Provided WAMP connection was not of type AlchemyWampConnection");
             }
 
             var session = base.InitializeWampSession(connection);
