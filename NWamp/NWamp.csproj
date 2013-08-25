@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9CD6A565-1F00-431A-A3D7-746508B05B7B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NWamp</RootNamespace>
+    <AssemblyName>NWamp</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DictionarySessionContainer.cs" />
+    <Compile Include="ISessionContainer.cs" />
+    <Compile Include="Messages\CallErrorMessage.cs" />
+    <Compile Include="Messages\CallMessage.cs" />
+    <Compile Include="Messages\CallMessages.cs" />
+    <Compile Include="Messages\CallResultMessage.cs" />
+    <Compile Include="Messages\EventMessage.cs" />
+    <Compile Include="Messages\Handlers\CallMessageHandler.cs" />
+    <Compile Include="Messages\Handlers\IMessageHandler.cs" />
+    <Compile Include="Messages\Handlers\PrefixMessageHandler.cs" />
+    <Compile Include="Messages\Handlers\PublishMessageHandler.cs" />
+    <Compile Include="Messages\Handlers\SubscribeMessageHandler.cs" />
+    <Compile Include="Messages\Handlers\UnsubscribeMessageHandler.cs" />
+    <Compile Include="Messages\Handlers\WelcomeMessageHandler.cs" />
+    <Compile Include="Messages\IMessage.cs" />
+    <Compile Include="Messages\MessageContext.cs" />
+    <Compile Include="Messages\IMessageProvider.cs" />
+    <Compile Include="Messages\MessageParsingException.cs" />
+    <Compile Include="Messages\MessageTypes.cs" />
+    <Compile Include="Messages\PrefixMessage.cs" />
+    <Compile Include="Messages\PublishMessage.cs" />
+    <Compile Include="Messages\SubscribeMessage.cs" />
+    <Compile Include="Messages\UnsubscribeMessage.cs" />
+    <Compile Include="Messages\WelcomeMessage.cs" />
+    <Compile Include="PrefixMap.cs" />
+    <Compile Include="ProcedureCallExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ProtocolVersionException.cs" />
+    <Compile Include="Rpc\IProcedureScheduler.cs" />
+    <Compile Include="Rpc\ProcedureContext.cs" />
+    <Compile Include="Rpc\ProcedureDefinition.cs" />
+    <Compile Include="Rpc\ProcedureDefinitions.cs" />
+    <Compile Include="Rpc\ProcedureScheduler.cs" />
+    <Compile Include="Topics\Topic.cs" />
+    <Compile Include="Topics\TopicCollection.cs" />
+    <Compile Include="Transport\IdGenerator.cs" />
+    <Compile Include="Transport\IResponseQueue.cs" />
+    <Compile Include="Transport\IWampConnection.cs" />
+    <Compile Include="Transport\IWampSession.cs" />
+    <Compile Include="Transport\SocketResponseQueue.cs" />
+    <Compile Include="Transport\WampSession.cs" />
+    <Compile Include="BaseWampClient.cs" />
+    <Compile Include="WampConstants.cs" />
+    <Compile Include="WampException.cs" />
+    <Compile Include="BaseWampHost.cs" />
+    <Compile Include="WampPrefixException.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

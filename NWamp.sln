@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NWamp", "NWamp\NWamp.csproj", "{9CD6A565-1F00-431A-A3D7-746508B05B7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NWamp.Alchemy", "NWamp.Alchemy\NWamp.Alchemy.csproj", "{AB6D9CF7-A965-49A3-A207-1E890E52B4C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NWamp.Test", "NWamp.Test\NWamp.Test.csproj", "{223F020F-8DBB-4D19-BBF4-C7A294FC1BB8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2D39DFD9-7553-4A9E-81B8-40B9DC936A67}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Alchemy", "Alchemy", "{7D252876-6F78-448C-9F36-622A9AAADB7B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{DF82CF84-D5AA-4DA3-86F0-9FEB91651046}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NWamp.Examples", "NWamp.Examples\NWamp.Examples.csproj", "{E1D5DFC5-9B1B-4EB5-90C7-0876230CAF50}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9CD6A565-1F00-431A-A3D7-746508B05B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CD6A565-1F00-431A-A3D7-746508B05B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CD6A565-1F00-431A-A3D7-746508B05B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CD6A565-1F00-431A-A3D7-746508B05B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB6D9CF7-A965-49A3-A207-1E890E52B4C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB6D9CF7-A965-49A3-A207-1E890E52B4C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB6D9CF7-A965-49A3-A207-1E890E52B4C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB6D9CF7-A965-49A3-A207-1E890E52B4C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{223F020F-8DBB-4D19-BBF4-C7A294FC1BB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{223F020F-8DBB-4D19-BBF4-C7A294FC1BB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{223F020F-8DBB-4D19-BBF4-C7A294FC1BB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{223F020F-8DBB-4D19-BBF4-C7A294FC1BB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1D5DFC5-9B1B-4EB5-90C7-0876230CAF50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1D5DFC5-9B1B-4EB5-90C7-0876230CAF50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1D5DFC5-9B1B-4EB5-90C7-0876230CAF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1D5DFC5-9B1B-4EB5-90C7-0876230CAF50}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{223F020F-8DBB-4D19-BBF4-C7A294FC1BB8} = {2D39DFD9-7553-4A9E-81B8-40B9DC936A67}
+		{9CD6A565-1F00-431A-A3D7-746508B05B7B} = {2D39DFD9-7553-4A9E-81B8-40B9DC936A67}
+		{AB6D9CF7-A965-49A3-A207-1E890E52B4C2} = {7D252876-6F78-448C-9F36-622A9AAADB7B}
+		{E1D5DFC5-9B1B-4EB5-90C7-0876230CAF50} = {DF82CF84-D5AA-4DA3-86F0-9FEB91651046}
+	EndGlobalSection
+EndGlobal
