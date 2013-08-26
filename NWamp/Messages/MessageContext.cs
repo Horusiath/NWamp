@@ -17,6 +17,11 @@ namespace NWamp.Messages
         public bool Cancel { get; set; }
 
         /// <summary>
+        /// Gets or sets WAMP host address.
+        /// </summary>
+        public string HostAddress { get; set; }
+
+        /// <summary>
         /// Gets or sets the incoming <see cref="IMessage"/> instance.
         /// </summary>
         public IMessage Message { get; set; }
@@ -44,6 +49,6 @@ namespace NWamp.Messages
         /// <summary>
         /// Gets or sets collection of defined procedures, which could be called using RPC.
         /// </summary>
-        public IDictionary<Uri, ProcedureDefinition> Procedures { get; set; }
+        public IDictionary<string, ProcedureDefinition> Procedures { get; set; }
     }
 }

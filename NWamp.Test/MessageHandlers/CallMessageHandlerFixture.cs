@@ -32,7 +32,7 @@ namespace NWamp.Test.MessageHandlers
             schedulerMock.Setup(scheduler => scheduler.Schedule(It.IsAny<ProcedureContext>())).Verifiable();
             var context = new MessageContext
             {
-                Procedures = new Dictionary<Uri, ProcedureDefinition> { { new Uri(procUri), new ProcedureDefinition(procUri, null) } },
+                Procedures = new Dictionary<string, ProcedureDefinition> { { procUri, new ProcedureDefinition(procUri, null) } },
                 Scheduler = schedulerMock.Object,
                 Message = new CallMessage(callId, procUri)
             };
@@ -48,7 +48,7 @@ namespace NWamp.Test.MessageHandlers
             schedulerMock.Setup(scheduler => scheduler.Schedule(It.IsAny<ProcedureContext>())).Verifiable();
             var context = new MessageContext
             {
-                Procedures = new Dictionary<Uri, ProcedureDefinition> { },
+                Procedures = new Dictionary<string, ProcedureDefinition> { },
                 Scheduler = schedulerMock.Object,
                 Message = new CallMessage(callId, procUri)
             };

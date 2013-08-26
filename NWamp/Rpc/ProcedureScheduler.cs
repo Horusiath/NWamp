@@ -71,7 +71,6 @@ namespace NWamp.Rpc
         {
             Action action = () =>
                 {
-                    var callId = context.CallId;
                     IMessage message;
                     try
                     {

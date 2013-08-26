@@ -10,10 +10,10 @@ namespace NWamp.Examples
         protected void Application_Start(object sender, EventArgs e)
         {
             _host = new AlchemyWampHost(IPAddress.Any, 3333)
-                .RegisterFunction("/Calculator#Add", (double x, double y) => x + y)
-                .RegisterFunction("/Calculator#Sub", (double x, double y) => x - y)
-                .RegisterFunction("/Calculator#Mul", (double x, double y) => x * y)
-                .RegisterFunction("/Calculator#Div", (double x, double y) => x / y);
+                .RegisterFunction("http://localhost:3333/Calculator#Add", (double x, double y) => x + y)
+                .RegisterFunction("http://localhost:3333/Calculator#Sub", (double x, double y) => x - y)
+                .RegisterFunction("http://localhost:3333/Calculator#Mul", (double x, double y) => x * y)
+                .RegisterFunction("http://localhost:3333/Calculator#Div", (double x, double y) => x / y);
 
             _host.Start();
         }

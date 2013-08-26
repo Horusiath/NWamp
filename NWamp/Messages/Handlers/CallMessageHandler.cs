@@ -20,15 +20,18 @@ namespace NWamp.Messages.Handlers
             if (message != null)
             {
                 ProcedureDefinition procedureDefinition;
-                var procUri = new Uri(message.ProcUri, UriKind.RelativeOrAbsolute);
-                if (messageContext.Procedures.TryGetValue(procUri, out procedureDefinition))
+                if (messageContext.Procedures.TryGetValue(message.ProcUri, out procedureDefinition))
                 {
                     var context = CreateProcedureContext(message, procedureDefinition, messageContext.SenderSession);
                     messageContext.Scheduler.Schedule(context);
                 }
                 else
                 {
-                    //TODO: when procedure for requested URI has not been found CallErrorMessage should be sent
+                    var errorUri = messageContext.HostAddress + "/Error#ProcedureNotFound";
+                    var description = string.Format("No remote procedure for {0} URI has been found", message.ProcUri);
+                    var callErrorMessage = new CallErrorMessage(message.CallId, errorUri, description);
+
+                    messageContext.Response.Send(messageContext.SenderSession.SessionId, callErrorMessage);
                 }
             }
         }

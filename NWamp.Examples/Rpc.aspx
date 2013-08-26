@@ -9,8 +9,8 @@
             var x = +(fst.val()),
                 y = +(sec.val());
             
-            session.call("ws://0.0.0.0:3333" + uri, x, y).then(
-                function (res) { result.val(res); },
+            session.call("http://localhost:3333" + uri, x, y).then(
+                function (res) { console.log(res); result.val(res); },
                 function (error, desc) { console.log("error: " + desc); }
             );
         }

@@ -39,7 +39,7 @@ namespace NWamp
         /// <summary>
         /// Collection fo registered methods to be called using WAMP RPC mechanism.
         /// </summary>
-        protected IDictionary<Uri, ProcedureDefinition> Procedures;
+        protected IDictionary<string, ProcedureDefinition> Procedures;
 
         /// <summary>
         /// Collection of message handlers used for responing on incoming WAMP messages.
@@ -67,7 +67,7 @@ namespace NWamp
             ResponseQueue = new SocketResponseQueue();
             Scheduler = new ProcedureScheduler(ResponseQueue, typeResolver);
             Sessions = new DictionarySessionContainer();
-            Procedures = new Dictionary<Uri, ProcedureDefinition>();
+            Procedures = new Dictionary<string, ProcedureDefinition>();
         }
 
         /// <summary>
@@ -227,6 +227,7 @@ namespace NWamp
             return new MessageContext
                        {
                            Message = message,
+                           HostAddress = AddressUri.ToString(),
                            SenderSession = sender,
                            Procedures = Procedures,
                            Response = ResponseQueue,
@@ -275,11 +276,12 @@ namespace NWamp
         /// </summary>
         /// <param name="procUri">Absolute or relative uri string</param>
         /// <returns></returns>
-        private Uri GetProcedureUri(Uri procUri)
+        private string GetProcedureUri(string procUri)
         {
-            return procUri.IsAbsoluteUri
+            var uri = new Uri(procUri, UriKind.RelativeOrAbsolute);
+            return uri.IsAbsoluteUri
                        ? procUri
-                       : new Uri(AddressUri, procUri);
+                       : new Uri(AddressUri, procUri).ToString();
         }
 
         /// <summary>
