@@ -9,13 +9,23 @@ namespace NWamp
     /// <summary>
     /// Abstract class representing WAMP client object.
     /// </summary>
-    public abstract class BaseWampClient : IDisposable
+    public abstract class BaseWampClient : IWampClient
     {
-        public IWampSession Session { get; protected set; }
+        protected BaseWampClient()
+        {
+            
+        }
 
-        public IDictionary<string, Task> PendingCalls { get; protected set; }
+        public bool IsConnected { get; private set; }
 
-        protected virtual void OnConnectionInitialized(WelcomeMessage message)
+        public IEnumerable<KeyValuePair<string, string>> Prefixes { get; private set; }
+
+        public void Connect(string address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Prefix(string curie, string uri)
         {
             throw new NotImplementedException();
         }
@@ -30,44 +40,29 @@ namespace NWamp
             throw new NotImplementedException();
         }
 
-        public void Publish(string topicUri, object eventObject, bool excludeMe = false)
+        public void Publish(string topicUri, object eventObject, bool excludeSelf = false)
         {
             throw new NotImplementedException();
         }
 
-        public void PublishExcept(string topicUri, object eventObject, params string[] exculdedSessions)
+        public void PublishTo(string topicUri, object eventObject, IEnumerable<string> eligibleSessions)
         {
             throw new NotImplementedException();
         }
 
-        public void PublishTo(string topicUri, object eventObject, params string[] eligibleSessions)
+        public void PublishExcept(string topicUri, object eventObject, IEnumerable<string> excludeSessions)
         {
             throw new NotImplementedException();
         }
 
-        public object Call(string procUri, params object[] args)
+        public Task<TResult> CallAsync<TResult>(string procUri, params object[] arguments)
         {
             throw new NotImplementedException();
         }
 
-        public Task CallAsyn(string procUri, params object[] args)
+        public void Dispose()
         {
             throw new NotImplementedException();
-        }
-
-        public virtual void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual MessageContext CreateMessageContext(IMessage message)
-        {
-            var messageContext = new MessageContext
-                                     {
-                                         Message = message,
-                                         SenderSession = Session
-                                     };
-            return messageContext;
         }
     }
 }

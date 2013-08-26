@@ -7,14 +7,13 @@ using NWamp.Rpc;
 using NWamp.Topics;
 using NWamp.Transport;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace NWamp
 {
     /// <summary>
     /// Abstract class representing WAMP server host.
     /// </summary>
-    public abstract class BaseWampHost : IDisposable
+    public abstract class BaseWampHost : IWampHost
     {
         /// <summary>
         /// Sender task used for checking if ResponseQueue has some message to send and sending them.
@@ -123,7 +122,7 @@ namespace NWamp
         /// Registers na new procedure to be callable using RPC mechanism.
         /// </summary>
         /// <param name="procedureDefinition">Definition of remote procedure</param>
-        protected internal virtual BaseWampHost RegisterProcedure(ProcedureDefinition procedureDefinition)
+        public virtual void RegisterProcedure(ProcedureDefinition procedureDefinition)
         {
             procedureDefinition.ProcedureUri = GetProcedureUri(procedureDefinition.ProcedureUri);
 
@@ -131,8 +130,6 @@ namespace NWamp
                 Procedures[procedureDefinition.ProcedureUri] = procedureDefinition;
             else
                 Procedures.Add(procedureDefinition.ProcedureUri, procedureDefinition);
-
-            return this;
         }
 
         /// <summary>

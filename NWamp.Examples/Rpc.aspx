@@ -1,73 +1,99 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Rpc.aspx.cs" Inherits="NWamp.Examples.Rpc" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript">
-        var session, fst, sec, result, add, sub, mul, div;
-        var wsuri = "ws://localhost:3333";
-        
-        function calculateHandler(uri) {
-            var x = +(fst.val()),
-                y = +(sec.val());
-            
-            session.call("http://localhost:3333" + uri, x, y).then(
-                function (res) { console.log(res); result.val(res); },
-                function (error, desc) { console.log("error: " + desc); }
-            );
+
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <style>
+        #calculator {
+            padding: 10px;    
         }
 
-        $(function () {
-            fst = $('#first-no');
-            sec = $('#second-no');
-            result = $('#result');
-            add = $('#btn-add');
-            sub = $('#btn-sub');
-            mul = $('#btn-mul');
-            div = $('#btn-div');
-            
-            ab.connect(wsuri,
-              function (sess) {
-                  session = sess;
-              },
-              function (code, reason) {
-                  console.log(reason);
-              }
-            );
+        #calc-keyboard {
+            margin: 4px;    
+        }
 
-            add.click(function () {
-                calculateHandler("/Calculator#Add");
-            });
-            
-            sub.click(function () {
-                calculateHandler("/Calculator#Sub");
-            });
-            
-            mul.click(function () {
-                calculateHandler("/Calculator#Mul");
-            });
-            
-            div.click(function () {
-                calculateHandler("/Calculator#Div");
-            });
-        });
-    </script>
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="form-inline" role="form">
-        <div class="form-group">
-            <label class="sr-only" for="first-no">First number</label>
-            <input type="number" class="form-control" id="first-no" placeholder="First number">
-        </div>
-        <div class="form-group">
-            <label class="sr-only" for="second-no">Password</label>
-            <input type="number" class="form-control" id="second-no" placeholder="Second number">
-        </div>
-        <button id="btn-add" class="btn btn-default">+</button>
-        <button id="btn-sub" class="btn btn-default">-</button>
-        <button id="btn-mul" class="btn btn-default">*</button>
-        <button id="btn-div" class="btn btn-default">/</button>
-        <div class="form-group">
-            <label class="sr-only" for="result">Password</label>
-            <input type="number" class="form-control" id="result" placeholder="Result" readonly="readonly">
+        #calc-keyboard .btn {
+            width: 35px;
+            height: 35px;
+        }
+    </style>
+    <div class="page-header">
+        <h1>RPC example - remote calculator</h1>
+    </div>
+
+    <div id="calculator" class="well col-md-2" data-bind="with: calculator">
+        <p>
+            <input type="text" id="calc-display" data-bind="value: display" readonly="readonly"/>
+        </p>
+        <div id="calc-keyboard">
+            <table>
+                <tr>
+                    <td colspan="3">
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: clear">C</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(7); }">7</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(8); }">8</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(9); }">9</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info" data-bind="click: function () { appendOperator('/'); }">/</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(4); }">4</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(5); }">5</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(6); }">6</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info" data-bind="click: function () { appendOperator('*'); }">*</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(1); }">1</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(2); }">2</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(3); }">3</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info" data-bind="click: function () { appendOperator('-'); }">-</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit('.'); }">.</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-default" data-bind="click: function () { appendDigit(0); }">0</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" data-bind="click: calculate">=</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info" data-bind="click: function () { appendOperator('+'); }">+</button>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
+</asp:Content>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="scripts" runat="server">
+    <script type="text/javascript" src="Scripts/app/rpc.js"></script>
 </asp:Content>

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlchemyWampClient.cs" />
     <Compile Include="AlchemyWampConnection.cs" />
     <Compile Include="AlchemyWampHost.cs" />
     <Compile Include="NewtonsoftTypeResolver.cs" />

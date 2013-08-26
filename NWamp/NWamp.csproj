@@ -44,6 +44,8 @@
   <ItemGroup>
     <Compile Include="DictionarySessionContainer.cs" />
     <Compile Include="ISessionContainer.cs" />
+    <Compile Include="IWampClient.cs" />
+    <Compile Include="IWampHost.cs" />
     <Compile Include="Messages\CallErrorMessage.cs" />
     <Compile Include="Messages\CallMessage.cs" />
     <Compile Include="Messages\CallMessages.cs" />
