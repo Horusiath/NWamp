@@ -6,47 +6,44 @@
         this.shell = shell;
 
         this.display = ko.observable('');
-        this.fnum = ko.observable('');
-        this.snum = ko.observable('');
-        this.operator = ko.observable('');
-        this.expression = ko.computed(function() {
-            return this.fnum() + ' ' + this.operator() + ' ' + this.snum() + ' = ';
-        }, this);
         this.appendDigit = function(digit) {
             var value = self.display();
             self.display(value.toString() + digit);
         };
-        this.appendOperator = function(operator) {
-            self.fnum(+(self.display()));
-            self.operator(operator);
-            self.display('');
+        this.appendOperator = function (operator) {
+            var text = self.display().toString(); 
+            var nums = text.split(' ');
+            if(nums.length === 1) {
+                self.display(text + ' ' + operator + ' ');
+            }
+            else if(nums.length == 3) {
+                self.calculate(operator);
+            }
         };
 
         this.clear = function() {
             self.display('');
-            self.fnum('');
-            self.snum('');
-            self.operator('');
         };
 
-        this.calculate = function () {
-            self.snum(+(self.display()));
+        this.calculate = function (op) {
+            var nums = self.display().toString().split(' ');
             var url;
-            switch (self.operator()) {
+            switch (nums[1]) {
                 case '+': url = 'http://localhost:3333/Calculator#Add'; break;
                 case '-': url = 'http://localhost:3333/Calculator#Sub'; break;
                 case '*': url = 'http://localhost:3333/Calculator#Mul'; break;
                 case '/': url = 'http://localhost:3333/Calculator#Div'; break;
                 
                 default:
-                    throw Error('unknown operator: ' + self.operator());
+                    throw Error('unknown operator: ' + nums[1]);
             }
 
-            self.shell.log('<strong>Client request:</strong> ' + url + ' <strong>with args:</strong> ' + [self.fnum(), self.snum()]);
-            self.shell.session.call(url, self.fnum(), self.snum())
+            self.shell.log('<strong>Client request:</strong> ' + url + ' <strong>with args:</strong> ' + nums);
+            self.shell.session.call(url, nums[0], nums[2])
                 .then(function (response) {
                     self.shell.log('<strong>Server response:</strong> ' + response);
                     self.display(response);
+                    if(typeof op === 'string') self.appendOperator(op);
                 },
                 function (error, desc) {
                     self.shell.log('<strong>Server error:</strong> ' + desc);

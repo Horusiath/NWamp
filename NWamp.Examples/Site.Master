@@ -22,8 +22,8 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="Rpc.aspx">RPC Example</a></li>
-            <li><a href="PubSub.aspx">PubSub Example</a></li>
+            <li><a href="Rpc.aspx">Simple RPC Example</a></li>
+            <li><a href="PubSub.aspx">Simple PubSub Example</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
